@@ -1,47 +1,38 @@
-import logo from './logo.svg';
-import './App.css';
 import React, { useState, useEffect } from 'react';
-import axios from 'axios'
+import axios from 'axios';
 
-function App() {
-  const [student, setstudent] = useState([])
+const App = () => {
+  const [students, setStudents] = useState([]);
   useEffect(() => {
-    const fetchStudents = async () => {
-      try {
-        const response = await fetch('http://localhost:5000/api/data')
-        const data = await response.json();
-        setstudent(data.data)
-      } catch (error) {
+    axios.get('http://localhost:3001/api/data').then(response => setStudents(response.data)).catch(error => console.error('Error fetching data:', error));
 
-      }
-    }
-    fetchStudents()
-  }, [])
+  }, []);
 
   return (
-    <div className="App">
+    <div>
       <table>
-        <thread>
+        <thead>
           <tr>
             <th>ID</th>
             <th>First Name</th>
             <th>Last Name</th>
             <th>Email</th>
           </tr>
-        </thread>
+        </thead>
         <tbody>
-          {student.map(s => (
-            <tr key={s.id}>
-              <td>{s.id}</td>
-              <td>{s.first_name}</td>
-              <td>{s.Last_name}</td>
-              <td>{s.email}</td>
+          {students.map(student => (
+            <tr key={student.id}>
+              <td>{student.id}</td>
+              <td>{student.first_name}</td>
+              <td>{student.last_name}</td>
+              <td>{student.email}</td>
             </tr>
           ))}
         </tbody>
       </table>
     </div>
   );
-}
+};
+
 
 export default App;
